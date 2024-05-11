@@ -3,14 +3,15 @@
 namespace App\Http\Factories;
 
 use App\Http\Commands\Command;
-use App\Http\Commands\RefreshDataCommand;
+use App\Http\Commands\SearchJobCommand;
 
-class DataActionCommandFactory implements CommandFactory
+class JobActionCommandFactory implements CommandFactory
 {
+
     public function create(string $action): Command
     {
-        if ($action === 'refresh') {
-            return app(RefreshDataCommand::class);
+        if ($action === 'list') {
+            return app(SearchJobCommand::class);
         }
 
         throw new \InvalidArgumentException('Invalid action');

@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\Api\DataController;
-use App\Http\Controllers\Api\JobLogController;
+use App\Http\Controllers\DataController;
+use App\Http\Controllers\JobLogController;
 use Illuminate\Support\Facades\Route;
 
 /*

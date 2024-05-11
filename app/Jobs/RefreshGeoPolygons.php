@@ -25,7 +25,7 @@ class RefreshGeoPolygons implements ShouldQueue
      */
     public function handle(): void
     {
-        echo 'WWWW';
+
     }
 
 //    public function middleware(): array
