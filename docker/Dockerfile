@@ -4,6 +4,7 @@ ARG user
 ARG uid
 
 ENV SUPERVISOR_PHP_COMMAND="php -d variables_order=EGPCS /var/www/html/artisan serve --host=0.0.0.0 --port=80"
+ENV SUPERVISOR_PHP_QUEUE_COMMAND="php -d variables_order=EGPCS /var/www/html/artisan queue:work --queue=default --tries=3"
 ENV SUPERVISOR_PHP_USER="nobody"
 
 WORKDIR /var/www/html
@@ -26,6 +27,10 @@ RUN pecl update-channels
 
 RUN pecl install redis \
     && docker-php-ext-enable redis
+
+RUN apt-get install -y libmemcached-dev zlib1g-dev libssl-dev
+RUN yes '' | pecl install -f memcached-3.2.0 \
+  && docker-php-ext-enable memcached
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 

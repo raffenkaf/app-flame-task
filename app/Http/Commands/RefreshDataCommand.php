@@ -4,7 +4,8 @@ namespace App\Http\Commands;
 
 use App\Jobs\RefreshGeoPolygons;
 use App\Models\JobLog;
-use App\Models\StatusEnums\JobLogJobType;
+use App\Models\Enums\JobLogJobType;
+use App\Repositories\JobLogRepository;
 
 class RefreshDataCommand extends BaseCommand
 {
@@ -16,13 +17,14 @@ class RefreshDataCommand extends BaseCommand
     public function execute(array $params): void
     {
         $delayInSeconds = $params['delaySeconds'] ?? 0;
+
         $jobLog = new JobLog([
             'type' => JobLogJobType::REFRESH_GEO_POLYGONS,
             'scheduled_at' => now()->addSeconds($delayInSeconds),
         ]);
         $jobLog->save();
 
-        RefreshGeoPolygons::dispatch()->delay(now()->addSeconds($delayInSeconds));
+        RefreshGeoPolygons::dispatch($jobLog->id)->delay(now()->addSeconds($delayInSeconds));
     }
 
     public function getResult(): array

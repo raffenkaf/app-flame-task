@@ -3,7 +3,7 @@
 namespace App\Http\Commands;
 
 use App\Http\Resources\JobLogResource;
-use App\Models\StatusEnums\JobLogJobType;
+use App\Models\Enums\JobLogJobType;
 use App\Repositories\JobLogRepository;
 use Illuminate\Http\Request;
 

@@ -22,7 +22,8 @@ class JobLog extends Model
     protected $fillable = [
         'type',
         'scheduled_at',
-        'params'
+        'params',
+        'status',
     ];
 
     protected $casts = [

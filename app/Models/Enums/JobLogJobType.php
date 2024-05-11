@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\StatusEnums;
+namespace App\Models\Enums;
 
 use App\Jobs\RefreshGeoPolygons;
 
