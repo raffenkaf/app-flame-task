@@ -2,10 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Enums\JobLogJobType;
 use Illuminate\Validation\Rule;
 
-class JobLogGetActionRequest extends BaseActionRequest
+class DataGetActionRequest extends BaseActionRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -15,9 +14,9 @@ class JobLogGetActionRequest extends BaseActionRequest
     public function rules(): array
     {
         return [
-            'action' => ['required', Rule::in(['list'])],
-            'limit' => ['sometimes', 'integer', 'min:1', 'max:100'],
-            'type' => ['sometimes', 'string', Rule::in([JobLogJobType::REFRESH_GEO_POLYGONS])]
+            'action' => ['required', Rule::in(['search'])],
+            'lon' => [Rule::requiredIf($this->action === 'search'), 'numeric', 'max:45', 'min:20'],
+            'lat' => [Rule::requiredIf($this->action === 'search'), 'numeric', 'max:60', 'min:40'],
         ];
     }
 }

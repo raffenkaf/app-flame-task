@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Factories\DataActionCommandFactory;
+use App\Http\Requests\DataGetActionRequest;
 use App\Http\Requests\DataUpdateActionRequest;
-use Illuminate\Http\Request;
 
 class DataController extends Controller
 {
@@ -18,8 +18,13 @@ class DataController extends Controller
         return response()->json(['data' => $result]);
     }
 
-    public function getAction(DataActionCommandFactory $factory, Request $request)
+    public function getAction(DataActionCommandFactory $factory, DataGetActionRequest $request)
     {
-        //
+        $validated = $request->validated();
+
+        $command = $factory->create($validated['action']);
+        $command->execute($validated);
+        $result = $command->getResult();
+        return response()->json(['data' => $result]);
     }
 }

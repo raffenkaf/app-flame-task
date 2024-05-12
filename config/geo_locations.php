@@ -11,7 +11,7 @@ return [
         ['country' => 'Ukraine', 'state' => 'Kharkiv Oblast'],
         ['country' => 'Ukraine', 'state' => 'Kherson Oblast'],
         ['country' => 'Ukraine', 'state' => 'Khmelnytskyi Oblast'],
-        ['country' => 'Ukraine', 'state' => 'Kiev Oblast'],
+        ['country' => 'Ukraine', 'state' => 'Kyiv Oblast'],
         ['country' => 'Ukraine', 'state' => 'Kirovohrad Oblast'],
         ['country' => 'Ukraine', 'state' => 'Luhansk Oblast'],
         ['country' => 'Ukraine', 'state' => 'Lviv Oblast'],
@@ -26,6 +26,8 @@ return [
         ['country' => 'Ukraine', 'state' => 'Zakarpattia Oblast'],
         ['country' => 'Ukraine', 'state' => 'Zaporizhia Oblast'],
         ['country' => 'Ukraine', 'state' => 'Zhytomyr Oblast'],
-        ['country' => 'Ukraine', 'state' => 'Republic of Crimea']
+        ['country' => 'Ukraine', 'state' => 'Republic of Crimea'],
+        ['country' => 'Ukraine', 'state' => 'Kyiv'],
+        ['country' => 'Russia', 'state' => 'Sevastopol'] // tyt nominatim ne prav (pry chomy krym - UA)
     ]
 ];
