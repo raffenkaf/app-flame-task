@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Factories\DataActionCommandFactory;
 use App\Http\Requests\DataGetActionRequest;
 use App\Http\Requests\DataUpdateActionRequest;
+use App\Models\Oblast;
 
 class DataController extends Controller
 {
@@ -28,11 +29,10 @@ class DataController extends Controller
         return response()->json(['data' => $result]);
     }
 
-    public function deleteAction(DataActionCommandFactory $factory)
+    public function deleteAction()
     {
-        $command = $factory->create('delete');
-        $command->execute([]);
-        $result = $command->getResult();
-        return response()->json(['data' => $result]);
+        Oblast::truncate();
+
+        return response()->json(['data' => ['result' => 'success']]);
     }
 }
