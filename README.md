@@ -1,66 +1,42 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+## Порядок запуску проекту трохи відрізняється від ТЗ:
+### Зверність увагу - composer setup а не composer install 
+1. composer **_setup_**
+2. docker-compose up -d
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Також є нюанс з областями:
+Київ та Севастополь є окремими сутностями(міста республіканського значення).
+Тому точка в Києві буде відповідати Києву, а не Київській області.
 
-## About Laravel
+## Власне ТЗ:
+Task: Create a git repository with code for an app that satisfies requirements below.
+Time needed: 3h min, 1d max.
+Components: Docker, MySQL, Redis, Laravel, PHP, Memcached.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Starts an application:
+$ docker compose up -d
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Queues background job via Redis, to download and insert/upsert data in specified number of seconds:
+$ curl -s -X PUT 'http://127.0.0.1:8081/data?action=refresh&delaySeconds=123'
+{"data": {"success": true}}
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Gets status of background job that is not finished:
 
-## Learning Laravel
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+$ curl 'http://127.0.0.1:8081/jobs?action=list&limit=1'
+{"data": [{"createdTs": 1712670771, "sheduledForTs": 1712670831, "state": 0}]}
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+Gets status of background job that is finished:
+$ curl 'http://127.0.0.1:8081/jobs?action=list&limit=1'
+{"data": [{"createTs": 1712670771, "scheduledForTs": 1712670831, "state": 2}]}
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Background job handler behavior: downloads polygons of all oblasts of Ukraine from Nominatim public API, and saves them into MySQL.
 
-## Laravel Sponsors
+Queries the data in MySQL, caches response in Memcached:
+$ curl 'http://127.0.0.1:8081/data?action=search&lat=50.4753622&lon=30.4193448'
+{"data": {"geo": {"oblast": "Kyiv Oblast"}, "cache": "miss"}}
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Purges the data:
+$ curl -X DELETE http://127.0.0.1:8081/data
+{"data": {"status": "success"}}
 
-### Premium Partners
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

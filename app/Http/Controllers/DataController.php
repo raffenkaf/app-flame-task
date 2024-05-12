@@ -27,4 +27,12 @@ class DataController extends Controller
         $result = $command->getResult();
         return response()->json(['data' => $result]);
     }
+
+    public function deleteAction(DataActionCommandFactory $factory)
+    {
+        $command = $factory->create('delete');
+        $command->execute([]);
+        $result = $command->getResult();
+        return response()->json(['data' => $result]);
+    }
 }

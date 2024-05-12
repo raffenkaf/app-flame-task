@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 Route::put('/data', [DataController::class, 'updateAction']);
 Route::get('/data', [DataController::class, 'getAction']);
 Route::get('/jobs', [JobLogController::class, 'getAction']);
+Route::delete('/data', [DataController::class, 'deleteAction']);
 
 Route::get('/', function () {
     return view('welcome');
